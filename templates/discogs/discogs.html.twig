@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}calliostro/discogs-bundle-demo{% endblock %}
+
+{% block body %}
+    <h1>calliostro/discogs-bundle-demo</h1>
+    <p>This page shows an artist.</p>
+    <table>
+        <tbody>
+        <tr>
+            <td>album:</td>
+            <td>
+                {% for album in albums.releases %}
+                    <li>{{ album.title }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endblock body %}
