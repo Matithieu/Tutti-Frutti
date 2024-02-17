@@ -7,29 +7,23 @@ class DiscogsReleaseDTO
     private $style;
     private $thumb;
     private $title;
-    private $country;
     private $format;
     private $uri;
-    private $community;
     private $label;
-    private $catno;
     private $year;
     private $genre;
     private $resourceUrl;
     private $type;
     private $id;
 
-    public function __construct($style, $thumb, $title, $country, $format, $uri, $community, $label, $catno, $year, $genre, $resourceUrl, $type, $id)
+    public function __construct($style, $thumb, $title, $format, $uri, $label, $year, $genre, $resourceUrl, $type, $id)
     {
         $this->style = $style;
         $this->thumb = $thumb;
         $this->title = $title;
-        $this->country = $country;
         $this->format = $format;
         $this->uri = $uri;
-        $this->community = $community;
         $this->label = $label;
-        $this->catno = $catno;
         $this->year = $year;
         $this->genre = $genre;
         $this->resourceUrl = $resourceUrl;
@@ -52,11 +46,6 @@ class DiscogsReleaseDTO
         return $this->title;
     }
 
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
     public function getFormat()
     {
         return $this->format;
@@ -67,19 +56,9 @@ class DiscogsReleaseDTO
         return $this->uri;
     }
 
-    public function getCommunity()
-    {
-        return $this->community;
-    }
-
     public function getLabel()
     {
         return $this->label;
-    }
-
-    public function getCatno()
-    {
-        return $this->catno;
     }
 
     public function getYear()

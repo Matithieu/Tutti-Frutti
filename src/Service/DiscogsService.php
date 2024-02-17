@@ -30,9 +30,9 @@ class DiscogsService
         return $response->toArray();
     }
 
-    public function search($query): array
+    public function search(string $query, int $page = 1, int $limit = 10): array
     {
-        $url = 'database/search?q=' . $query . '&token=' . $this->token;
+        $url = 'database/search?q=' . $query . '&type=all' . '&token=' . $this->token . '&per_page=' . $limit . '&page=' . $page;
         $response = $this->client->request('GET', $url);
         return $response->toArray();
     }
