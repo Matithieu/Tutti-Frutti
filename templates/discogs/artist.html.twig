@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ artist.nameVariations[0] }}
+	{{ artist.nameVariations[0] ?? 'Unknown Artist' }}
 {% endblock %}
 
 {% block main %}
