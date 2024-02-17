@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\DTO;
 
@@ -12,7 +12,7 @@ class DiscogsArtistDTO
     private $images;
     private $members;
 
-    public function __construct($nameVariations, $profile, $releasesUrl, $resourceUrl, $uri ,$images, $members = null)
+    public function __construct($nameVariations, $profile, $releasesUrl, $resourceUrl, $uri, $images, $members = null)
     {
         $this->nameVariations = $nameVariations;
         $this->profile = $profile;
