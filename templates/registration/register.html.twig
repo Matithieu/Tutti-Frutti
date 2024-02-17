@@ -2,7 +2,7 @@
 
 {% block title %}Register{% endblock %}
 
-{% block body %}
+{% block main %}
     <h1>Register</h1>
 
     {{ form_errors(registrationForm) }}
@@ -16,4 +16,4 @@
 
         <button type="submit" class="btn">Register</button>
     {{ form_end(registrationForm) }}
-{% endblock %}
+{% endblock main %}
