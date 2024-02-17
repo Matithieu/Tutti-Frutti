@@ -13,16 +13,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DiscogsAPIController extends AbstractController
 {
     #[Route('/artist/{id}', name: 'artist_show')]
-    public function show(int $id, DiscogsService $discogsService): Response
+    public function searchArtist(int $id, DiscogsService $discogsService): Response
     {
         $artistData = $discogsService->getArtist($id);
 
         $artistDTO = new DiscogsArtistDTO(
-            $artistData['namevariations'],
-            $artistData['profile'],
-            $artistData['releases_url'],
-            $artistData['resource_url'],
-            $artistData['images'],
+            $artistData['namevariations'] ?? null,
+            $artistData['profile'] ?? null,
+            $artistData['releases_url'] ?? null,
+            $artistData['resource_url'] ?? null,
+            $artistData['images'] ?? null,
             $artistData['members'] ?? null
         );
 
