@@ -20,12 +20,19 @@ class DiscogsService
     {
         $url = 'artists/' . $id . '?token=' . $this->token;
         $response = $this->client->request('GET', $url);
-        return $response;
+        return $response->toArray();
     }
 
     public function getArtistReleases($id): array
     {
         $url = 'artists/' . $id . '/releases?token=' . $this->token;
+        $response = $this->client->request('GET', $url);
+        return $response->toArray();
+    }
+
+    public function search($query): array
+    {
+        $url = 'database/search?q=' . $query . '&token=' . $this->token;
         $response = $this->client->request('GET', $url);
         return $response->toArray();
     }
