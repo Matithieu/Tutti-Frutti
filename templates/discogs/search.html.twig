@@ -13,7 +13,7 @@
 	{% else %}
 		<div class="container flex-column gap-4">
 			{% for result in results.results %}
-				<a href="{{ path('artist_show', {'id': result.id}) }}" class="w-150 h-150 cursor-pointer overflow-hidden">
+				<a href="{{ path('type_of_media', {'type': result.type , 'id': result.id}) }}" class="w-150 h-150 cursor-pointer overflow-hidden">
 					<div class="rounded-lg shadow-md ">
 						{% if result.thumb %}
 							<img src="{{ result.thumb }}" alt="Album cover for {{ result.title }}" class="object-cover w-150 h-150"/>

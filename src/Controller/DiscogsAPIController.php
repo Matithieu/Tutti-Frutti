@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
-use App\DTO\DiscogsArtistDTO;
 use App\DTO\DiscogsReleaseDTO;
+use App\DTO\DiscogsMasterDTO;
+use App\DTO\DiscogsArtistDTO;
+use App\DTO\DiscogsLabelDTO;
+
 use App\Service\DiscogsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +15,69 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DiscogsAPIController extends AbstractController
 {
+    #[Route(path: '/{type}?{id}', name: 'type_of_media', requirements: ['type' => 'master|artist|release|label'])]
+    public function typeOfMedia(string $type, $id): Response
+    {
+        switch ($type) {
+            case 'release':
+                return $this->redirectToRoute('release_show', ['id' => $id]);
+            case 'master':
+                return $this->redirectToRoute('master_show', ['id' => $id]);
+            case 'artist':
+                return $this->redirectToRoute('artist_show', ['id' => $id]);
+            case 'label':
+                return $this->redirectToRoute('label_show', ['id' => $id]);
+        }
+        return $this->redirectToRoute('landing'); // This should never happen, put a 404 page here
+    }
+
+    #[Route('/release/{id}', name: 'release_show')]
+    public function searchRelease(int $id, DiscogsService $discogsService): Response
+    {
+        $releaseData = $discogsService->getRelease($id);
+
+        $releaseDTO = new DiscogsReleaseDTO(
+            $releaseData['style'] ?? null,
+            $releaseData['thumb'] ?? null,
+            $releaseData['title'] ?? null,
+            $releaseData['format'] ?? null,
+            $releaseData['uri'] ?? null,
+            $releaseData['label'] ?? null,
+            $releaseData['year'] ?? null,
+            $releaseData['genre'] ?? null,
+            $releaseData['resource_url'] ?? null,
+            $releaseData['type'] ?? null,
+            $releaseData['id'] ?? null
+        );
+
+        return $this->render('discogs/release.html.twig', [
+            'release' => $releaseDTO,
+        ]);
+    }
+
+    #[Route('/master/{id}', name: 'master_show')]
+    public function searchMaster(int $id, DiscogsService $discogsService): Response
+    {
+        $masterData = $discogsService->getMaster($id);
+
+        $masterDTO = new DiscogsMasterDTO(
+            $masterData['id'] ?? null,
+            $masterData['title'] ?? null,
+            $masterData['year'] ?? null,
+            $masterData['artists'] ?? null,
+            $masterData['genres'] ?? null,
+            $masterData['styles'] ?? null,
+            $masterData['videos'] ?? null,
+            $masterData['main_release'] ?? null,
+            $masterData['images'] ?? null,
+            $masterData['tracklist'] ?? null
+        );
+
+        return $this->render('discogs/master.html.twig', [
+            'master' => $masterDTO,
+        ]);
+    }
+
     #[Route('/artist/{id}', name: 'artist_show')]
     public function searchArtist(int $id, DiscogsService $discogsService): Response
     {
@@ -28,6 +94,25 @@ class DiscogsAPIController extends AbstractController
 
         return $this->render('discogs/artist.html.twig', [
             'artist' => $artistDTO,
+        ]);
+    }
+
+    #[Route('/label/{id}', name: 'label_show')]
+    public function searchLabel(int $id, DiscogsService $discogsService): Response
+    {
+        $labelData = $discogsService->getLabel($id);
+
+        $labelDTO = new DiscogsLabelDTO(
+            $labelData['name'] ?? null,
+            $labelData['profile'] ?? null,
+            $labelData['contact_info'] ?? null,
+            $labelData['sublabels'] ?? null,
+            $labelData['urls'] ?? [],
+            $labelData['images'] ?? []
+        );
+
+        return $this->render('discogs/label.html.twig', [
+            'label' => $labelDTO,
         ]);
     }
 

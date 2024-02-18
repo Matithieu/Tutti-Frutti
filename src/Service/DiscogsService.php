@@ -30,6 +30,27 @@ class DiscogsService
         return $response->toArray();
     }
 
+    public function getMaster($id)
+    {
+        $url = 'masters/' . $id . '?token=' . $this->token;
+        $response = $this->client->request('GET', $url);
+        return $response->toArray();
+    }
+
+    public function getRelease($id)
+    {
+        $url = 'releases/' . $id . '?token=' . $this->token;
+        $response = $this->client->request('GET', $url);
+        return $response->toArray();
+    }
+
+    public function getLabel($id)
+    {
+        $url = 'labels/' . $id . '?token=' . $this->token;
+        $response = $this->client->request('GET', $url);
+        return $response->toArray();
+    }
+
     public function search(string $query, int $page = 1, int $limit = 10): array
     {
         $url = 'database/search?q=' . $query . '&type=all' . '&token=' . $this->token . '&per_page=' . $limit . '&page=' . $page;
