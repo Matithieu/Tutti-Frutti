@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ release.title }}
+{% endblock %}
+
+{% block main %}
+	<h1>Release details</h1>
+	<p>Title:
+		{{ release.title }}</p>
+	<img src="{{ release.thumb }}" alt="Release cover">
+	<p>Year:
+		{{ release.year }}</p>
+	<p>Format:
+		{{ release.format }}</p>
+	<p>Genre:
+		{{ release.genre }}</p>
+	<p>Label:
+		{{ release.label }}</p>
+	<p>Style:
+		{{ release.style }}</p>
+	<p>Resource URL:
+		<a href="{{ release.resourceUrl }}">{{ release.resourceUrl }}</a>
+	</p>
+	<p>URI:
+		<a href="{{ release.uri }}">{{ release.uri }}</a>
+	</p>
+{% endblock %}
