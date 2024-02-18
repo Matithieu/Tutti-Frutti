@@ -29,23 +29,27 @@ class DiscogsAPIController extends AbstractController
         return $this->redirectToRoute('landing'); // This should never happen, put a 404 page here
     }
 
-
-    #[Route('/artist/{id}', name: 'artist_show')]
-    public function searchArtist(int $id, DiscogsService $discogsService): Response
+    #[Route('/release/{id}', name: 'release_show')]
+    public function searchRelease(int $id, DiscogsService $discogsService): Response
     {
-        $artistData = $discogsService->getArtist($id);
+        $releaseData = $discogsService->getRelease($id);
 
-        $artistDTO = new DiscogsArtistDTO(
-            $artistData['namevariations'] ?? null,
-            $artistData['profile'] ?? null,
-            $artistData['releases_url'] ?? null,
-            $artistData['resource_url'] ?? null,
-            $artistData['images'] ?? null,
-            $artistData['members'] ?? null
+        $releaseDTO = new DiscogsReleaseDTO(
+            $releaseData['style'] ?? null,
+            $releaseData['thumb'] ?? null,
+            $releaseData['title'] ?? null,
+            $releaseData['format'] ?? null,
+            $releaseData['uri'] ?? null,
+            $releaseData['label'] ?? null,
+            $releaseData['year'] ?? null,
+            $releaseData['genre'] ?? null,
+            $releaseData['resource_url'] ?? null,
+            $releaseData['type'] ?? null,
+            $releaseData['id'] ?? null
         );
 
-        return $this->render('discogs/artist.html.twig', [
-            'artist' => $artistDTO,
+        return $this->render('discogs/release.html.twig', [
+            'release' => $releaseDTO,
         ]);
     }
 
@@ -69,6 +73,25 @@ class DiscogsAPIController extends AbstractController
 
         return $this->render('discogs/master.html.twig', [
             'master' => $masterDTO,
+        ]);
+    }
+
+    #[Route('/artist/{id}', name: 'artist_show')]
+    public function searchArtist(int $id, DiscogsService $discogsService): Response
+    {
+        $artistData = $discogsService->getArtist($id);
+
+        $artistDTO = new DiscogsArtistDTO(
+            $artistData['namevariations'] ?? null,
+            $artistData['profile'] ?? null,
+            $artistData['releases_url'] ?? null,
+            $artistData['resource_url'] ?? null,
+            $artistData['images'] ?? null,
+            $artistData['members'] ?? null
+        );
+
+        return $this->render('discogs/artist.html.twig', [
+            'artist' => $artistDTO,
         ]);
     }
 
