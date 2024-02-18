@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Form\SearchType;
-use Discogs\DiscogsClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,10 +20,10 @@ class SearchController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $searchData = $form->getData();
-            $id = $searchData['id'];
+            $query = $searchData['query'];
 
             // Render the search result template and pass the ID
-            return $this->redirectToRoute('search_result', ['id' => $id]);
+            return $this->redirectToRoute('search_result', ['query' => $query]);
         }
 
         return $this->render('search/index.html.twig', [

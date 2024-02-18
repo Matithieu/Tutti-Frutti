@@ -1,0 +1,48 @@
+{# discogs/search.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Search Results
+{% endblock %}
+
+{% block main %}
+	<h1>Search Results</h1>
+
+	{% if results.results is empty %}
+		<p class="text-center font-bold text-xl text-slate-700 mt-10">No results found for the given query.</p>
+	{% else %}
+		<div class="container flex-column gap-4">
+			{% for result in results.results %}
+				<a href="{{ path('artist_show', {'id': result.id}) }}" class="w-150 h-150 cursor-pointer overflow-hidden">
+					<div class="rounded-lg shadow-md ">
+						{% if result.thumb %}
+							<img src="{{ result.thumb }}" alt="Album cover for {{ result.title }}" class="object-cover w-150 h-150"/>
+						{% else %}
+							<img src="https://via.placeholder.com/150" alt="Placeholder image" class="object-cover w-150 h-150"/>
+						{% endif %}
+						<div class="p-4">
+							<h2 class="text-lg font-bold text-slate-700 truncate">{{ result.title }}</h2>
+						</div>
+					</div>
+				</a>
+			{% endfor %}
+		</div>
+		<div class="pagination">
+			{% if results.pagination.page > 1 %}
+				<a href="{{ path('search_result', {'query': app.request.get('query'), 'page': results.pagination.page - 1}) }}">Précédent</a>
+			{% endif %}
+
+			Page
+			{{ results.pagination.page }}
+			sur
+			{{ results.pagination.pages }},
+			{{ results.pagination.items }}
+			éléments au total
+
+			{% if results.pagination.page < results.pagination.pages %}
+				<a href="{{ path('search_result', {'query': app.request.get('query'), 'page': results.pagination.page + 1}) }}">Suivant</a>
+			{% endif %}
+		</div>
+
+	{% endif %}
+{% endblock %}

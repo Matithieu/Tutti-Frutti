@@ -1,4 +1,10 @@
 {{ form_start(form) }}
-{{ form_row(form.id) }}
-{{ form_row(form.search) }}
+<div class="flex items-center">
+	<div class="">
+		{{ form_row(form.query) }}
+	</div>
+	<div class="btn btn-primary btn-block text-white border">
+		{{ form_row(form.search) }}
+	</div>
+</div>
 {{ form_end(form) }}
