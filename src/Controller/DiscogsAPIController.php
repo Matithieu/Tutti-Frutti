@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\DTO\DiscogsArtistDTO;
+use App\DTO\DiscogsMasterDTO;
 use App\DTO\DiscogsReleaseDTO;
 use App\Service\DiscogsService;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +46,29 @@ class DiscogsAPIController extends AbstractController
 
         return $this->render('discogs/artist.html.twig', [
             'artist' => $artistDTO,
+        ]);
+    }
+
+    #[Route('/master/{id}', name: 'master_show')]
+    public function searchMaster(int $id, DiscogsService $discogsService): Response
+    {
+        $masterData = $discogsService->getMaster($id);
+
+        $masterDTO = new DiscogsMasterDTO(
+            $masterData['id'] ?? null,
+            $masterData['title'] ?? null,
+            $masterData['year'] ?? null,
+            $masterData['artists'] ?? null,
+            $masterData['genres'] ?? null,
+            $masterData['styles'] ?? null,
+            $masterData['videos'] ?? null,
+            $masterData['main_release'] ?? null,
+            $masterData['images'] ?? null,
+            $masterData['tracklist'] ?? null
+        );
+
+        return $this->render('discogs/master.html.twig', [
+            'master' => $masterDTO,
         ]);
     }
 
