@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ label.name }}
+{% endblock %}
+
+{% block main %}
+
+	<h1>{{ label.name }}</h1>
+	<p>{{ label.profile }}</p>
+
+	<h2>Contact Information</h2>
+	<pre>{{ label.contactInfo }}</pre>
+
+	<h2>Sublabels</h2>
+	<ul>
+		{% for sublabel in label.sublabels %}
+			<li>
+				<a href="#">{{ sublabel.name }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+
+	<h2>Social Media</h2>
+	<ul>
+		{% for url in label.urls %}
+			<li>
+				<a href="{{ url }}">{{ url }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+
+	{% if label.images %}
+		<h2>Images</h2>
+		<ul>
+			{% for image in label.images %}
+				<li>
+					<img src="{{ image.uri }}">
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endblock %}

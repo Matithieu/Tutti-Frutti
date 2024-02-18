@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
-use App\DTO\DiscogsArtistDTO;
-use App\DTO\DiscogsMasterDTO;
 use App\DTO\DiscogsReleaseDTO;
+use App\DTO\DiscogsMasterDTO;
+use App\DTO\DiscogsArtistDTO;
+use App\DTO\DiscogsLabelDTO;
+
 use App\Service\DiscogsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,6 +94,25 @@ class DiscogsAPIController extends AbstractController
 
         return $this->render('discogs/artist.html.twig', [
             'artist' => $artistDTO,
+        ]);
+    }
+
+    #[Route('/label/{id}', name: 'label_show')]
+    public function searchLabel(int $id, DiscogsService $discogsService): Response
+    {
+        $labelData = $discogsService->getLabel($id);
+
+        $labelDTO = new DiscogsLabelDTO(
+            $labelData['name'] ?? null,
+            $labelData['profile'] ?? null,
+            $labelData['contact_info'] ?? null,
+            $labelData['sublabels'] ?? null,
+            $labelData['urls'] ?? [],
+            $labelData['images'] ?? []
+        );
+
+        return $this->render('discogs/label.html.twig', [
+            'label' => $labelDTO,
         ]);
     }
 
