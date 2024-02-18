@@ -12,6 +12,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class DiscogsAPIController extends AbstractController
 {
+    #[Route(path: '/{type}?{id}', name: 'type_of_media', requirements: ['type' => 'master|artist|release|label'])]
+    public function typeOfMedia(string $type, $id): Response
+    {
+        switch ($type) {
+            case 'release':
+                return $this->redirectToRoute('release_show', ['id' => $id]);
+            case 'master':
+                return $this->redirectToRoute('master_show', ['id' => $id]);
+            case 'artist':
+                return $this->redirectToRoute('artist_show', ['id' => $id]);
+            case 'label':
+                return $this->redirectToRoute('label_show', ['id' => $id]);
+        }
+        return $this->redirectToRoute('landing'); // This should never happen, put a 404 page here
+    }
+
+
     #[Route('/artist/{id}', name: 'artist_show')]
     public function searchArtist(int $id, DiscogsService $discogsService): Response
     {
