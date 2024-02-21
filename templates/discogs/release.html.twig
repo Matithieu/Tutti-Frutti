@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ release.title }}
+	{{ release.title }}
 {% endblock %}
 
 {% block main %}
@@ -12,13 +12,22 @@
 	<p>Year:
 		{{ release.year }}</p>
 	<p>Format:
-		{{ release.format }}</p>
+		{% for formats in release.format %}
+			{{ format.name }}
+		{% endfor %}
+	</p>
 	<p>Genre:
-		{{ release.genre }}</p>
+		{% for genres in release.genre %}
+			{{ genre.name }}
+		{% endfor %}
+	</p>
 	<p>Label:
 		{{ release.label }}</p>
 	<p>Style:
-		{{ release.style }}</p>
+		{% for styles in release.style %}
+			{{ styles }}
+		{% endfor %}
+	</p>
 	<p>Resource URL:
 		<a href="{{ release.resourceUrl }}">{{ release.resourceUrl }}</a>
 	</p>
