@@ -4,15 +4,16 @@ namespace App\DTO;
 
 class DiscogsArtistDTO
 {
-    private $nameVariations;
-    private $profile;
-    private $releasesUrl;
-    private $resourceUrl;
-    private $uri;
-    private $images;
-    private $members;
+    public array $nameVariations;
+    public string $profile;
+    public string $releasesUrl;
+    public string $resourceUrl;
+    public string $uri;
+    public array $images;
+    public array $members;
+    public int $id;
 
-    public function __construct($nameVariations, $profile, $releasesUrl, $resourceUrl, $uri, $images, $members = null)
+    public function __construct(array $nameVariations, string $profile, string $releasesUrl, string $resourceUrl, string $uri, array $images, array $members, int $id)
     {
         $this->nameVariations = $nameVariations;
         $this->profile = $profile;
@@ -21,40 +22,6 @@ class DiscogsArtistDTO
         $this->uri = $uri;
         $this->images = $images;
         $this->members = $members;
-    }
-
-    public function getNameVariations()
-    {
-        return $this->nameVariations;
-    }
-
-    public function getProfile()
-    {
-        return $this->profile;
-    }
-
-    public function getReleasesUrl()
-    {
-        return $this->releasesUrl;
-    }
-
-    public function getResourceUrl()
-    {
-        return $this->resourceUrl;
-    }
-
-    public function getUri()
-    {
-        return $this->uri;
-    }
-
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    public function getMembers()
-    {
-        return $this->members;
+        $this->id = $id;
     }
 }

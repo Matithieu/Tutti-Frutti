@@ -7,6 +7,7 @@ use App\DTO\DiscogsMasterDTO;
 use App\DTO\DiscogsArtistDTO;
 use App\DTO\DiscogsLabelDTO;
 
+use App\DTO\DiscogsSearchDTO;
 use App\Service\DiscogsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,16 +38,15 @@ class DiscogsAPIController extends AbstractController
         $releaseData = $discogsService->getRelease($id);
 
         $releaseDTO = new DiscogsReleaseDTO(
-            $releaseData['style'] ?? null,
+            $releaseData['styles'] ?? [],
             $releaseData['thumb'] ?? null,
             $releaseData['title'] ?? null,
-            $releaseData['format'] ?? null,
             $releaseData['uri'] ?? null,
-            $releaseData['label'] ?? null,
+            $releaseData['label'] ?? '',
             $releaseData['year'] ?? null,
-            $releaseData['genre'] ?? null,
+            $releaseData['format'] ?? [],
+            $releaseData['genre'] ?? [],
             $releaseData['resource_url'] ?? null,
-            $releaseData['type'] ?? null,
             $releaseData['id'] ?? null
         );
 
@@ -84,12 +84,14 @@ class DiscogsAPIController extends AbstractController
         $artistData = $discogsService->getArtist($id);
 
         $artistDTO = new DiscogsArtistDTO(
-            $artistData['namevariations'] ?? null,
+            $artistData['namevariations'] ?? [],
             $artistData['profile'] ?? null,
             $artistData['releases_url'] ?? null,
             $artistData['resource_url'] ?? null,
-            $artistData['images'] ?? null,
-            $artistData['members'] ?? null
+            $artistData['uri'] ?? null,
+            $artistData['images'] ?? [],
+            $artistData['members'] ?? [],
+            $artistData['id'] ?? null
         );
 
         return $this->render('discogs/artist.html.twig', [
@@ -103,6 +105,7 @@ class DiscogsAPIController extends AbstractController
         $labelData = $discogsService->getLabel($id);
 
         $labelDTO = new DiscogsLabelDTO(
+            $labelData['id'] ?? null,
             $labelData['name'] ?? null,
             $labelData['profile'] ?? null,
             $labelData['contact_info'] ?? null,
@@ -124,18 +127,18 @@ class DiscogsAPIController extends AbstractController
         $results = $discogsService->search($query, $page, 10);
 
         $releaseDTOs = array_map(function ($result) {
-            return new DiscogsReleaseDTO(
-                $result['style'] ?? null,
-                $result['thumb'] ?? null,
+            return new DiscogsSearchDTO(
+                $result['id'] ?? 0,
                 $result['title'] ?? null,
-                $result['format'] ?? null,
+                $result['style'] ?? [],
+                $result['country'] ?? '',
+                $result['format'] ?? [],
                 $result['uri'] ?? null,
-                $result['label'] ?? null,
-                $result['year'] ?? null,
-                $result['genre'] ?? null,
-                $result['resource_url'] ?? null,
+                $result['label'] ?? [],
+                $result['year'] ?? 0,
                 $result['type'] ?? null,
-                $result['id'] ?? null
+                $result['thumb'] ?? null,
+                $result['genre'] ?? []
             );
         }, $results['results']);
 
