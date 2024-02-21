@@ -6,16 +6,16 @@ namespace App\DTO;
 
 class DiscogsMasterDTO
 {
-    public $id;
-    public $title;
-    public $year;
-    public $artists;
-    public $genres;
-    public $styles;
-    public $videos;
-    public $mainRelease;
-    public $images;
-    public $tracklist;
+    public int $id;
+    public string $title;
+    public int $year;
+    public array $artists;
+    public array $genres;
+    public array $styles;
+    public array $videos;
+    public int $mainRelease;
+    public array $images;
+    public array $tracklist;
 
     public function __construct(
         int $id,
