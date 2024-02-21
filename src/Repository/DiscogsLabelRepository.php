@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Label;
+use App\Entity\DiscogsLabel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Label>
+ * @extends ServiceEntityRepository<DiscogsLabel>
  *
- * @method Label|null find($id, $lockMode = null, $lockVersion = null)
- * @method Label|null findOneBy(array $criteria, array $orderBy = null)
- * @method Label[]    findAll()
- * @method Label[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method DiscogsLabel|null find($id, $lockMode = null, $lockVersion = null)
+ * @method DiscogsLabel|null findOneBy(array $criteria, array $orderBy = null)
+ * @method DiscogsLabel[]    findAll()
+ * @method DiscogsLabel[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class LabelRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Label::class);
+        parent::__construct($registry, DiscogsLabel::class);
     }
 
 //    /**
-//     * @return Label[] Returns an array of Label objects
+//     * @return DiscogsLabel[] Returns an array of DiscogsLabel objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class LabelRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Label
+//    public function findOneBySomeField($value): ?DiscogsLabel
 //    {
 //        return $this->createQueryBuilder('l')
 //            ->andWhere('l.exampleField = :val')
