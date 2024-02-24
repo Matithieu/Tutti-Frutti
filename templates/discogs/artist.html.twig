@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ artist.nameVariations[0] ?? 'Unknown Artist' }}
+	{{ artist.nameVariations[0] ?? artist.name ?? 'Unknown Artist' }}
 {% endblock %}
 
 {% block main %}
 	<div class="artist-container">
-		<h2>{{ artist.nameVariations.main ?? artist.nameVariations[0] ?? 'Unknown Artist' }}</h2>
+		<h2>{{ artist.nameVariations[0] ?? artist.name ?? 'Unknown Artist' }}</h2>
 
 		{% if artist.profile %}
 			<p>{{ artist.profile }}</p>
