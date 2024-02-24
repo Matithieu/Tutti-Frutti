@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240208110600 extends AbstractMigration
+final class Version20240224120604 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,13 +20,15 @@ final class Version20240208110600 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE "user" (uuid VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY(uuid))');
+        $this->addSql('ALTER TABLE discogs_track ALTER "position" TYPE VARCHAR(255)');
+        $this->addSql('ALTER TABLE discogs_track ALTER "position" TYPE VARCHAR(255)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('DROP TABLE "user"');
+        $this->addSql('ALTER TABLE discogs_track ALTER position TYPE INT');
+        $this->addSql('ALTER TABLE discogs_track ALTER position TYPE INT');
     }
 }
