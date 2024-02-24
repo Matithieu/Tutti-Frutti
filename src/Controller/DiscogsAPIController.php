@@ -2,12 +2,7 @@
 
 namespace App\Controller;
 
-use App\DTO\DiscogsReleaseDTO;
-use App\DTO\DiscogsMasterDTO;
-use App\DTO\DiscogsArtistDTO;
-use App\DTO\DiscogsLabelDTO;
-
-use App\DTO\DiscogsSearchDTO;
+use App\Entity\DiscogsMaster;
 use App\Service\DiscogsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,18 +32,7 @@ class DiscogsAPIController extends AbstractController
     {
         $releaseData = $discogsService->getRelease($id);
 
-        $releaseDTO = new DiscogsReleaseDTO(
-            $releaseData['styles'] ?? [],
-            $releaseData['thumb'] ?? null,
-            $releaseData['title'] ?? null,
-            $releaseData['uri'] ?? null,
-            $releaseData['label'] ?? '',
-            $releaseData['year'] ?? null,
-            $releaseData['format'] ?? [],
-            $releaseData['genre'] ?? [],
-            $releaseData['resource_url'] ?? null,
-            $releaseData['id'] ?? null
-        );
+        $releaseDTO = transformDiscogsRelease($releaseData);
 
         return $this->render('discogs/release.html.twig', [
             'release' => $releaseDTO,
@@ -60,21 +44,12 @@ class DiscogsAPIController extends AbstractController
     {
         $masterData = $discogsService->getMaster($id);
 
-        $masterDTO = new DiscogsMasterDTO(
-            $masterData['id'] ?? null,
-            $masterData['title'] ?? null,
-            $masterData['year'] ?? null,
-            $masterData['artists'] ?? null,
-            $masterData['genres'] ?? null,
-            $masterData['styles'] ?? null,
-            $masterData['videos'] ?? null,
-            $masterData['main_release'] ?? null,
-            $masterData['images'] ?? null,
-            $masterData['tracklist'] ?? null
-        );
+        $masterDTO = transformDiscogsMaster($masterData);
+        $isInFavorites = $this->getUser() ? $this->getUser()->getDiscogsMasters()->exists(fn (int $key, DiscogsMaster $master) => $master->getId() === $masterDTO->getId()) : false;
 
         return $this->render('discogs/master.html.twig', [
             'master' => $masterDTO,
+            'isInFavorites' => $isInFavorites,
         ]);
     }
 
@@ -83,19 +58,10 @@ class DiscogsAPIController extends AbstractController
     {
         $artistData = $discogsService->getArtist($id);
 
-        $artistDTO = new DiscogsArtistDTO(
-            $artistData['namevariations'] ?? [],
-            $artistData['profile'] ?? null,
-            $artistData['releases_url'] ?? null,
-            $artistData['resource_url'] ?? null,
-            $artistData['uri'] ?? null,
-            $artistData['images'] ?? [],
-            $artistData['members'] ?? [],
-            $artistData['id'] ?? null
-        );
+        $artist = transformDiscogsArtist($artistData);
 
         return $this->render('discogs/artist.html.twig', [
-            'artist' => $artistDTO,
+            'artist' => $artist,
         ]);
     }
 
@@ -104,15 +70,7 @@ class DiscogsAPIController extends AbstractController
     {
         $labelData = $discogsService->getLabel($id);
 
-        $labelDTO = new DiscogsLabelDTO(
-            $labelData['id'] ?? null,
-            $labelData['name'] ?? null,
-            $labelData['profile'] ?? null,
-            $labelData['contact_info'] ?? null,
-            $labelData['sublabels'] ?? null,
-            $labelData['urls'] ?? [],
-            $labelData['images'] ?? []
-        );
+        $labelDTO = transformDiscogsLabel($labelData);
 
         return $this->render('discogs/label.html.twig', [
             'label' => $labelDTO,
@@ -126,21 +84,7 @@ class DiscogsAPIController extends AbstractController
 
         $results = $discogsService->search($query, $page, 10);
 
-        $releaseDTOs = array_map(function ($result) {
-            return new DiscogsSearchDTO(
-                $result['id'] ?? 0,
-                $result['title'] ?? null,
-                $result['style'] ?? [],
-                $result['country'] ?? '',
-                $result['format'] ?? [],
-                $result['uri'] ?? null,
-                $result['label'] ?? [],
-                $result['year'] ?? 0,
-                $result['type'] ?? null,
-                $result['thumb'] ?? null,
-                $result['genre'] ?? []
-            );
-        }, $results['results']);
+        $releaseDTOs = transformDiscogsSearchDTO($results);
 
         $results['results'] = $releaseDTOs;
 

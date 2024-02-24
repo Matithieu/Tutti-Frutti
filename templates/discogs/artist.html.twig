@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ artist.nameVariations[0] ?? 'Unknown Artist' }}
+	{{ artist.nameVariations[0] ?? artist.name ?? 'Unknown Artist' }}
 {% endblock %}
 
 {% block main %}
 	<div class="artist-container">
-		<h2>{{ artist.nameVariations.main ?? artist.nameVariations[0] ?? 'Unknown Artist' }}</h2>
+		<h2>{{ artist.nameVariations[0] ?? artist.name ?? 'Unknown Artist' }}</h2>
 
 		{% if artist.profile %}
 			<p>{{ artist.profile }}</p>
@@ -14,20 +14,9 @@
 
 		{% if artist.images %}
 			<ul class="image-list">
-				{% for image in artist.images %}
-					<li>
-						<img src="{{ image.resource_url }}">
-					</li>
-				{% endfor %}
-			</ul>
-		{% endif %}
-
-		{% if artist.members %}
-			<h3>Members</h3>
-			<ul class="member-list">
-				{% for member in artist.members %}
-					<li>{{ member.name }}</li>
-				{% endfor %}
+				<li>
+					<img src="{{ artist.images }}">
+				</li>
 			</ul>
 		{% endif %}
 	</div>

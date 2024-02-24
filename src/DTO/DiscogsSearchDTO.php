@@ -16,7 +16,7 @@ class DiscogsSearchDTO
     private string $thumb;
     private array $genre;
 
-    public function __construct(int $id, string $title, array $style, string $country = null, array $format = [], string $uri, array $label, int $year, string $type, string $thumb, array $genre)
+    public function __construct(int $id, string $title, array $style, string $country = null, array $format, string $uri, array $label, int $year, string $type, string $thumb, array $genre)
     {
         $this->id = $id;
         $this->title = $title;
