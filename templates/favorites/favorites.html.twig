@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Liste des Masters
+{% endblock %}
+
+{% block main %}
+	<h1>Liste des Masters</h1>
+
+	<form method="post">
+		{{ form_start(form) }}
+
+		<div>
+			{{ form_row(form.filterType) }}
+		</div>
+
+		<div>
+			{{ form_row(form.filterValue) }}
+		</div>
+
+		<button type="submit">Filtrer</button>
+		{{ form_end(form) }}
+	</form>
+
+	{% for master in masters %}
+		<a href="{{ path('favorites_master_show', {'id': master.id}) }}" class="w-150 h-150 cursor-pointer overflow-hidden">
+			<div>
+				<h3>{{ master.title }}</h3>
+				{% for artist in master.artists %}
+					<div class="flex items-center space-x-4  px-4 py-4 rounded-md ">
+						<img src="{{ artist.images }}" alt="{{ artist.name }}" class="w-10 h-10 rounded-full ring-4 ring-white">
+						<p class="font-medium ">{{ artist.name }}</p>
+					</div>
+				{% endfor %}
+				<p>Année :
+					{{ master.year }}</p>
+				<p>Styles :
+					{{ master.styles | join(', ') }}</p>
+				<p>Genres :
+					{{ master.genres | join(', ') }}</p>
+				<hr>
+			</div>
+		</a>
+	{% endfor %}
+{% endblock %}
