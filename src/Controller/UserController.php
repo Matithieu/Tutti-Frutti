@@ -21,7 +21,9 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $discogsUserRepository = $entityManager->getRepository(User::class);
+
+            $discogsUserRepository->updateUser($user);
 
             $this->addFlash('success', 'Vos informations ont été modifiées avec succès.');
 

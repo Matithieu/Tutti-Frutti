@@ -29,8 +29,11 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $discogsUserRepository = $entityManager->getRepository(User::class);
+
+            $discogsUserRepository->createUser($user);
+
+            $this->addFlash('success', 'Votre compte a été créé avec succès.');
             // do anything else you need here, like send an email
 
             return $this->redirectToRoute('landing');
