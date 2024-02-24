@@ -2,48 +2,70 @@
 
 namespace App\Entity;
 
+use App\Entity\DiscogsArtist;
 use App\Repository\DiscogsMasterRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DiscogsMasterRepository::class)]
+#[ORM\Table(name: "discogs_master")]
 class DiscogsMaster
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: "integer")]
+    private int $id;
 
-    #[ORM\Column(length: 1000, nullable: true)]
-    private ?string $title = null;
+    #[ORM\Column(length: 1000, type: "string")]
+    private string $title;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $year = null;
+    #[ORM\Column(length: 1000, type: "string")]
+    private $uri;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
-    private ?array $artists = null;
+    #[ORM\Column(type: "integer")]
+    private int $year;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
-    private ?array $genres = null;
+    #[ORM\ManyToMany(targetEntity: DiscogsArtist::class, inversedBy: "discogs_master", cascade: ["persist", "remove"])]
+    #[ORM\JoinTable(name: "discogs_master_discogs_artist")]
+    private $artists;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
-    private ?array $styles = null;
+    #[ORM\ManyToMany(targetEntity: DiscogsTrack::class, inversedBy: "discogs_master", cascade: ["persist", "remove"])]
+    #[ORM\JoinTable(name: "discogs_master_discogs_track")]
+    private $tracks;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
-    private ?array $videos = null;
+    #[ORM\Column(type: "json", nullable: true)]
+    private $styles;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $mainRelease = null;
+    #[ORM\Column(type: "json", nullable: true)]
+    private $genres;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
-    private ?array $images = null;
+    #[ORM\ManyToMany(targetEntity: DiscogsVideo::class, inversedBy: "discogs_master", cascade: ["persist", "remove"])]
+    #[ORM\JoinTable(name: "discogs_master_discogs_video")]
+    private $videos;
 
-    #[ORM\Column(type: Types::SIMPLE_ARRAY, nullable: true)]
-    private ?array $trackList = null;
+    public function __construct(int $id, string $title, string $uri, int $year, array $styles = [], array $genres = [], array $artists = [], array $tracks = [], array $videos = [])
+    {
+        $this->id = $id;
+        $this->title = $title;
+        $this->uri = $uri;
+        $this->year = $year;
+        $this->styles = $styles;
+        $this->genres = $genres;
+        $this->artists = new ArrayCollection($artists);
+        $this->tracks = new ArrayCollection($tracks);
+        $this->videos = new ArrayCollection($videos);
+    }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getTitle(): ?string
@@ -51,9 +73,21 @@ class DiscogsMaster
         return $this->title;
     }
 
-    public function setTitle(?string $title): static
+    public function setTitle(string $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getUri(): ?string
+    {
+        return $this->uri;
+    }
+
+    public function setUri(string $uri): static
+    {
+        $this->uri = $uri;
 
         return $this;
     }
@@ -63,33 +97,59 @@ class DiscogsMaster
         return $this->year;
     }
 
-    public function setYear(?int $year): static
+    public function setYear(int $year): static
     {
         $this->year = $year;
 
         return $this;
     }
 
-    public function getArtists(): ?array
+    /**
+     * @return Collection|DiscogsArtist[]
+     */
+    public function getArtists(): Collection
     {
         return $this->artists;
     }
 
-    public function setArtists(?array $artists): static
+    public function addArtist(DiscogsArtist $artist): static
     {
-        $this->artists = $artists;
+        if (!$this->artists->contains($artist)) {
+            $this->artists->add($artist);
+        }
 
         return $this;
     }
 
-    public function getGenres(): ?array
+    public function removeArtist(DiscogsArtist $artist): void
     {
-        return $this->genres;
+        if ($this->artists->contains($artist)) {
+            $this->artists->removeElement($artist);
+        }
     }
 
-    public function setGenres(?array $genres): static
+    /**
+     * @return Collection|DiscogsTrack[]
+     */
+    public function getTracks(): Collection
     {
-        $this->genres = $genres;
+        return $this->tracks;
+    }
+
+    public function addTrack(DiscogsTrack $track): static
+    {
+        if (!$this->tracks->contains($track)) {
+            $this->tracks->add($track);
+        }
+
+        return $this;
+    }
+
+    public function removeTrack(DiscogsTrack $track): static
+    {
+        if ($this->tracks->contains($track)) {
+            $this->tracks->removeElement($track);
+        }
 
         return $this;
     }
@@ -106,50 +166,40 @@ class DiscogsMaster
         return $this;
     }
 
-    public function getVideos(): ?array
+    public function getGenres(): ?array
+    {
+        return $this->genres;
+    }
+
+    public function setGenres(?array $genres): static
+    {
+        $this->genres = $genres;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DiscogsVideo[]
+     */
+    public function getVideos(): Collection
     {
         return $this->videos;
     }
 
-    public function setVideos(?array $videos): static
+    public function addVideo(DiscogsVideo $video): static
     {
-        $this->videos = $videos;
+        if (!$this->videos->contains($video)) {
+            $this->videos->add($video);
+        }
 
         return $this;
     }
 
-    public function getMainRelease(): ?int
+    public function removeVideo(DiscogsVideo $video): static
     {
-        return $this->mainRelease;
-    }
-
-    public function setMainRelease(?int $mainRelease): static
-    {
-        $this->mainRelease = $mainRelease;
-
-        return $this;
-    }
-
-    public function getImages(): ?array
-    {
-        return $this->images;
-    }
-
-    public function setImages(?array $images): static
-    {
-        $this->images = $images;
-
-        return $this;
-    }
-
-    public function getTrackList(): ?array
-    {
-        return $this->trackList;
-    }
-
-    public function setTrackList(?array $trackList): static
-    {
-        $this->trackList = $trackList;
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+        }
 
         return $this;
     }
