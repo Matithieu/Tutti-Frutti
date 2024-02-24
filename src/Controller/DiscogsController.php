@@ -26,18 +26,17 @@ class DiscogsController extends AbstractController
         $discogsMaster = loadDiscogsMaster($discogsMasterRessource);
 
         // ManyToMany relationship, check if the master is already in the user's collection
-        if (!$user->getDiscogsMasters()->exists(fn (int $key, DiscogsMaster $master) => $master->getId() === $discogsMaster->getId())) {
+        if (!$user->getDiscogsMasters()->exists(fn(int $key, DiscogsMaster $master) => $master->getId() === $discogsMaster->getId())) {
 
             $userRepository = $entityManager->getRepository(User::class);
             $discogsMasterRepository = $entityManager->getRepository(DiscogsMaster::class);
 
             $discogsMasterInDb = $discogsMasterRepository->find($discogsMaster->getId());
-            
+
             // If the master is not in the database, add it
             if (!$discogsMasterInDb) {
-                $discogsMasterRepository->updateOrCreateDiscogsMaster($discogsMaster);
-            }
-            else {
+                $discogsMasterRepository->createDiscogsMaster($discogsMaster);
+            } else {
                 $discogsMaster = $discogsMasterRepository->find($discogsMaster->getId());
             }
 
@@ -61,7 +60,7 @@ class DiscogsController extends AbstractController
 
         $userRepository = $entityManager->getRepository(User::class);
 
-        $discogsMaster = $user->getDiscogsMasters()->filter(fn (DiscogsMaster $master) => $master->getId() === $discogsMasterId)->first();
+        $discogsMaster = $user->getDiscogsMasters()->filter(fn(DiscogsMaster $master) => $master->getId() === $discogsMasterId)->first();
 
         if ($discogsMaster) {
             $user->removeDiscogsMaster($discogsMaster);

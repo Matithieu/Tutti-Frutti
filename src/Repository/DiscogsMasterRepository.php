@@ -21,7 +21,7 @@ class DiscogsMasterRepository extends ServiceEntityRepository
         parent::__construct($registry, DiscogsMaster::class);
     }
 
-    public function updateOrCreateDiscogsMaster(DiscogsMaster $discogsMaster): void
+    public function createDiscogsMaster(DiscogsMaster $discogsMaster): void
     {
         $this->getEntityManager()->persist($discogsMaster);
         $this->getEntityManager()->flush();
