@@ -40,6 +40,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function oauthPersist(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
+        }
+
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
+    }
+
+
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
@@ -55,13 +67,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+     public function findByGoogleId($value): ?User
+        {
+            return $this->createQueryBuilder('u')
+                ->andWhere('u.google_id = :google_id')
+                ->setParameter('google_id', $value)
+                ->getQuery()
+                ->getOneOrNullResult()
+        ;
+        }
 }
