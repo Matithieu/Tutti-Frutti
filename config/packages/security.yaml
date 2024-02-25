@@ -39,7 +39,6 @@ security:
         - { path: ^/login, roles: }
         - { path: ^/register, roles: }
         - { path: ^/$, roles: }
-        - { path: ^/(_(profiler|wdt)|css|images|js)/, roles: }
         - { path: ^/, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
 
