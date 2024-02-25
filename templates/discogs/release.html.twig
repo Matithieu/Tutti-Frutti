@@ -5,27 +5,51 @@
 {% endblock %}
 
 {% block main %}
-	<h1>Release details</h1>
-	<p>Title:
-		{{ release.title }}</p>
-	<img src="{{ release.thumb }}" alt="Release cover">
-	<p>Year:
-		{{ release.year }}</p>
-	<p>Format:
-		{% for formats in release.format %}
-			{{ format.name }}
-		{% endfor %}
-	</p>
-	<p>Genre:
-		{% for genres in release.genre %}
-			{{ genre.name }}
-		{% endfor %}
-	</p>
-	<p>Label:
-		{{ release.label }}</p>
-	<p>Style:
-		{% for styles in release.style %}
-			{{ styles }}
-		{% endfor %}
-	</p>
+	<div class="container mx-auto px-4 mt-8 mb-16 text-white">
+		<h1 class="text-3xl font-bold mb-4">Release</h1>
+
+		<div class="flex flex-col sm:flex-row gap-4 mb-8">
+			<div class="w-full sm:w-1/3">
+				<img src="{{ release.thumb }}" alt="Release cover" class="w-full rounded-md shadow-md"/>
+			</div>
+			<div class="w-full sm:w-2/3">
+				<div class="mb-4">
+					<span class="text-sm font-bold text-gray-500">Title:</span>
+					<span class="text-lg font-medium">{{ release.title }}</span>
+				</div>
+				<div class="mb-4">
+					<span class="text-sm font-bold text-gray-500">Year:</span>
+					<span class="text-lg font-medium">{{ release.year }}</span>
+				</div>
+				<div class="mb-4">
+					<span class="text-sm font-bold text-gray-500">Format:</span>
+					<span class="text-lg font-medium">
+						{% for format in release.format %}
+							<span class="inline-block mr-2">{{ format.name }}</span>
+						{% endfor %}
+					</span>
+				</div>
+				<div class="mb-4">
+					<span class="text-sm font-bold text-gray-500">Genre:</span>
+					<span class="text-lg font-medium">
+						{% for genre in release.genre %}
+							<span class="inline-block mr-2">{{ genre.name }}</span>
+						{% endfor %}
+					</span>
+				</div>
+				<div class="mb-4">
+					<span class="text-sm font-bold text-gray-500">Label:</span>
+					<span class="text-lg font-medium">{{ release.label }}</span>
+				</div>
+				<div>
+					<span class="text-sm font-bold text-gray-500">Style:</span>
+					<span class="text-lg font-medium">
+						{% for style in release.style %}
+							<span class="inline-block mr-2">{{ style }}</span>
+						{% endfor %}
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -1,9 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Your Lucky Number{% endblock %}
+{% block title %}Tutti Frutti
+{% endblock %}
 
-{% block header %}Landing Page{% endblock %}
+{% block header %}Landing Page
+{% endblock %}
 
 {% block main %}
-    <h1>Your lucky number is {{ number }}</h1>
+
+	<div class="bg-cover bg-center h-screen" style="background-image: url('background.png');">
+		<div class="flex flex-col items-center mt-[20vh] mb-[51vh] text-6xl font-bold">
+			<div>
+				<h1 class="text-white mb-4">Tutti Frutti</h1>
+			</div>
+		</div>
+	</div>
+
 {% endblock main %}

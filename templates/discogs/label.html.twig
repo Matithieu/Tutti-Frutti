@@ -5,39 +5,40 @@
 {% endblock %}
 
 {% block main %}
+	<div class="mx-auto p-8 max-w-2xl text-white">
+		<h1 class="text-3xl font-bold mb-4">{{ label.name }}</h1>
+		<p class=" mb-4">{{ label.profile }}</p>
 
-	<h1>{{ label.name }}</h1>
-	<p>{{ label.profile }}</p>
+		<h2 class="text-xl font-bold mb-2">Contact Information</h2>
+		<pre class="p-4 mb-4">{{ label.contactInfo }}</pre>
 
-	<h2>Contact Information</h2>
-	<pre>{{ label.contactInfo }}</pre>
-
-	<h2>Sublabels</h2>
-	<ul>
-		{% for sublabel in label.sublabels %}
-			<li>
-				<a href="#">{{ sublabel.name }}</a>
-			</li>
-		{% endfor %}
-	</ul>
-
-	<h2>Social Media</h2>
-	<ul>
-		{% for url in label.urls %}
-			<li>
-				<a href="{{ url }}">{{ url }}</a>
-			</li>
-		{% endfor %}
-	</ul>
-
-	{% if label.images %}
-		<h2>Images</h2>
-		<ul>
-			{% for image in label.images %}
-				<li>
-					<img src="{{ image.uri }}">
+		<h2 class="text-xl font-bold mb-2">Sublabels</h2>
+		<ul class="list-disc pl-4 mb-4 p-4">
+			{% for sublabel in label.sublabels %}
+				<li class="mb-2">
+					<a class="">{{ sublabel.name }}</a>
 				</li>
 			{% endfor %}
 		</ul>
-	{% endif %}
+
+		<h2 class="text-xl font-bold mb-2">Social Media</h2>
+		<ul class="list-disc pl-4 mb-4">
+			{% for url in label.urls %}
+				<li>
+					<a href="{{ url }}" class="text-blue-500">{{ url }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+
+		{% if label.images %}
+			<h2 class="text-xl font-bold mb-2">Images</h2>
+			<ul class="grid grid-cols-2 gap-4">
+				{% for image in label.images %}
+					<li>
+						<img src="{{ image.uri }}" alt="{{ label.name }}" class="w-full h-auto rounded-lg">
+					</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+	</div>
 {% endblock %}

@@ -5,20 +5,17 @@
 {% endblock %}
 
 {% block main %}
-	<div class="artist-container">
-		<h2>{{ artist.nameVariations[0] ?? artist.name ?? 'Unknown Artist' }}</h2>
+	<div class="artist-container mx-auto p-8 max-w-2xl text-white">
+		<h2 class="text-3xl font-bold mb-4">{{ artist.nameVariations[0] ?? artist.name ?? 'Unknown Artist' }}</h2>
 
 		{% if artist.profile %}
-			<p>{{ artist.profile }}</p>
+			<p class="text-white mb-4">{{ artist.profile }}</p>
 		{% endif %}
 
 		{% if artist.images %}
-			<ul class="image-list">
-				<li>
-					<img src="{{ artist.images }}">
-				</li>
-			</ul>
+			<div class="image-container">
+				<img src="{{ artist.images }}" alt="{{ artist.nameVariations[0] ?? artist.name ?? 'Unknown Artist' }}" class="w-full h-auto rounded-lg">
+			</div>
 		{% endif %}
 	</div>
-
 {% endblock main %}

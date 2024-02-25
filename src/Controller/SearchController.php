@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\SearchType;
+use FruitEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,10 +23,10 @@ class SearchController extends AbstractController
             $searchData = $form->getData();
             $query = $searchData['query'];
 
-            $fruits = ['apple', 'banana', 'orange', 'grape'];
+            $validFruits = FruitEnum::getValidValues();
 
-            if (!in_array(strtolower($query), $fruits)) {
-                $this->addFlash('error', 'Please enter a valid fruit.');
+            if (!in_array(strtolower($query), $validFruits)) {
+                $this->addFlash('error', 'Entrez un fruit valide.');
 
                 // Redirect to the route where the user is coming from
                 return $this->redirect($request->headers->get('referer'));
