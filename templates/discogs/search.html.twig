@@ -1,48 +1,63 @@
-{# discogs/search.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Search Results
 {% endblock %}
 
 {% block main %}
-	<h1>Search Results</h1>
+	<div class="max-w-screen-lg mx-auto">
+		<h1 class="text-3xl font-bold text-white mt-10 mb-10">
+			Résultat(s) pour "{{ app.request.get('query') }}"</h1>
+	</div>
 
 	{% if results.results is empty %}
 		<p class="text-center font-bold text-xl text-slate-700 mt-10">No results found for the given query.</p>
 	{% else %}
-		<div class="container flex-column gap-4">
+		<div class="max-w-screen-lg mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 ">
 			{% for result in results.results %}
-				<a href="{{ path('type_of_media', {'type': result.type , 'id': result.id}) }}" class="w-150 h-150 cursor-pointer overflow-hidden">
-					<div class="rounded-lg shadow-md ">
+				<a href="{{ path('type_of_media', {'type': result.type, 'id': result.id}) }}" class="group">
+					<div class="bg-gray-400 rounded-lg overflow-hidden shadow-md group-hover:shadow-lg transition duration-300">
 						{% if result.thumb %}
-							<img src="{{ result.thumb }}" alt="Album cover for {{ result.title }}" class="object-cover w-150 h-150"/>
+							<div class="relative overflow-hidden h-24 sm:h-32 md:h-40 lg:h-48">
+								<div class="border h-full w-full border-gray-300 p-4">
+									<img src="{{ result.thumb }}" alt="Album cover for {{ result.title }}" class="object-cover w-full h-full"/>
+								</div>
+							</div>
 						{% else %}
-							<img src="https://via.placeholder.com/150" alt="Placeholder image" class="object-cover w-150 h-150"/>
+							<div class="relative overflow-hidden h-24 sm:h-32 md:h-40 lg:h-48">
+								<div class="border h-full w-full border-gray-300 p-4">
+									<img src="MusicPlaceholder.png" class="object-cover"/>
+								</div>
+							</div>
 						{% endif %}
 						<div class="p-4">
-							<h2 class="text-lg font-bold text-slate-700 truncate">{{ result.title }}</h2>
+							<h2 class="text-lg font-bold text-slate-700 group-hover:text-blue-600 transition duration-300">{{ result.title }}</h2>
 						</div>
 					</div>
 				</a>
 			{% endfor %}
 		</div>
-		<div class="pagination">
-			{% if results.pagination.page > 1 %}
-				<a href="{{ path('search_result', {'query': app.request.get('query'), 'page': results.pagination.page - 1}) }}">Précédent</a>
-			{% endif %}
 
-			Page
-			{{ results.pagination.page }}
-			sur
-			{{ results.pagination.pages }},
-			{{ results.pagination.items }}
-			éléments au total
+		<div class="pagination flex justify-between items-center mt-8 text-white mx-auto max-w-screen-lg">
+			<div class="mr-10 ">
+				{% if results.pagination.page > 1 %}
+					<a href="{{ path('search_result', {'query': app.request.get('query'), 'page': results.pagination.page - 1}) }}" class="text-blue-600 hover:underline">Précédent</a>
+				{% endif %}
+			</div>
 
-			{% if results.pagination.page < results.pagination.pages %}
-				<a href="{{ path('search_result', {'query': app.request.get('query'), 'page': results.pagination.page + 1}) }}">Suivant</a>
-			{% endif %}
+			<span class="">
+				Page
+				{{ results.pagination.page }}
+				sur
+				{{ results.pagination.pages }},
+				{{ results.pagination.items }}
+				éléments au total
+			</span>
+
+			<div class="ml-10">
+				{% if results.pagination.page < results.pagination.pages %}
+					<a href="{{ path('search_result', {'query': app.request.get('query'), 'page': results.pagination.page + 1}) }}" class="text-blue-600 hover:underline">Suivant</a>
+				{% endif %}
+			</div>
 		</div>
-
 	{% endif %}
 {% endblock %}

@@ -3,17 +3,28 @@
 {% block title %}Register{% endblock %}
 
 {% block main %}
-    <h1>Register</h1>
+    <div class="flex items-center justify-center mt-40">
+        <div class="w-full max-w-sm p-4 bg-white border border-gray-200 text-white rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+            <h1 class="text-xl font-medium text-white dark:text-white mb-10">Inscription</h1>
 
-    {{ form_errors(registrationForm) }}
+            {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+            {{ form_start(registrationForm) }}
+            <div class="mb-4">
+                {{ form_row(registrationForm.email, { 'attr': {'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'} }) }}
+            </div>
+            <div class="mb-4">
+                {{ form_row(registrationForm.plainPassword, { 'label': 'Password', 'attr': {'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'} }) }}
+            </div>
+            <div class="mb-4">
+                {{ form_row(registrationForm.agreeTerms, { 'label': 'J\'accepte les termes et conditions', 'attr': {'class': 'ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'} }) }}
+            </div>
+            <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">S'enregistrer</button>
+            {{ form_end(registrationForm) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            <div class="mt-4 text-sm font-medium text-gray-500 dark:text-gray-300">
+                Déjà inscrit? <a href="{{ path('app_login') }}" class="text-blue-700 hover:underline dark:text-blue-500">Se connecter</a>
+            </div>
+        </div>
+    </div>
 {% endblock main %}

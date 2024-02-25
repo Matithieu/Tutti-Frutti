@@ -14,9 +14,9 @@
 				<h2>
 					{% if app.user %}
 						{% if isInFavorites %}
-							<a href="{{ path('remove_discogs_master', { 'discogsMasterId': master.id }) }}" class="text-red-500 hover:underline">Remove from favorites</a>
+							<a href="{{ path('remove_discogs_master', { 'discogsMasterId': master.id }) }}" class="text-red-500 hover:underline">Enlever des favoris</a>
 						{% else %}
-							<a href="{{ path('add_discogs_master', { 'discogsMasterId': master.id }) }}" class="text-green-500 hover:underline">Add to favorites</a>
+							<a href="{{ path('add_discogs_master', { 'discogsMasterId': master.id }) }}" class="text-green-500 hover:underline">Ajouter aux favoris</a>
 						{% endif %}
 					{% endif %}
 				</h2>
@@ -62,13 +62,12 @@
 									<p class="font-bold text-gray-700">{{ video.title }}</p>
 									<p class="text-sm text-gray-500">{{ video.description }}</p>
 								</div>
-								<a href="{{ video.uri }}" target="_blank" class="text-blue-500 hover:underline">Watch Video</a>
+								<a href="{{ video.uri }}" target="_blank" class="text-blue-500 hover:underline">Lien Vidéo</a>
 							</li>
 						{% endfor %}
 					{% endif %}
 				</ul>
 			</div>
-
 		</div>
 	</div>
 {% endblock %}
