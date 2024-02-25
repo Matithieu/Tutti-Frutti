@@ -77,7 +77,7 @@ class DiscogsController extends AbstractController
     }
 
     #[Route("/favorites", name: "favorites_index")]
-    public function index(DiscogsMasterRepository $repository, UserRepository $userRepository ,Request $request): Response
+    public function index(DiscogsMasterRepository $repository, UserRepository $userRepository, Request $request): Response
     {
         $form = $this->createForm(DiscogsMasterFilterType::class);
         $form->handleRequest($request);
@@ -109,6 +109,11 @@ class DiscogsController extends AbstractController
                     $masters = $repository->findDiscogsMasterByFormat($data['filterValue']);
                     break;
             }
+
+            // Clean the masters who are not in the user's collection
+            // Should be done in the repository ???
+            $masters = array_filter($masters, fn(DiscogsMaster $master) => $this->getUser()->getDiscogsMasters()->exists(fn(int $key, DiscogsMaster $masterInCollection) => $masterInCollection->getId() === $master->getId()));
+
         }
 
         return $this->render('favorites/favorites.html.twig', [
@@ -121,7 +126,7 @@ class DiscogsController extends AbstractController
     public function searchMaster(int $id, DiscogsMasterRepository $repository): Response
     {
         $master = $repository->find($id);
-        $isInFavorites = $this->getUser() ? $this->getUser()->getDiscogsMasters()->exists(fn (int $key, DiscogsMaster $master) => $master->getId() === $id) : false;
+        $isInFavorites = $this->getUser() ? $this->getUser()->getDiscogsMasters()->exists(fn(int $key, DiscogsMaster $master) => $master->getId() === $id) : false;
 
         return $this->render('favorites/master.html.twig', [
             'master' => $master,
@@ -129,3 +134,13 @@ class DiscogsController extends AbstractController
         ]);
     }
 }
+
+/*
+_______    _   _   _   ______          _   _   _ 
+|__   __|  | | | | (_) |  ____|        | | | | (_)
+   | |_   _| |_| |_ _  | |__ _ __ _   _| |_| |_ _ 
+   | | | | | __| __| | |  __| '__| | | | __| __| |
+   | | |_| | |_| |_| | | |  | |  | |_| | |_| |_| |
+   |_|\__,_|\__|\__|_| |_|  |_|   \__,_|\__|\__|_|
+
+*/
