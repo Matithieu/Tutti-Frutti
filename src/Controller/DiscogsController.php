@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Entity\DiscogsMaster;
 use App\Entity\User;
+use App\Form\DiscogsMasterFilterType;
+use App\Repository\DiscogsMasterRepository;
+use App\Repository\UserRepository;
 use App\Service\DiscogsService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,4 +75,72 @@ class DiscogsController extends AbstractController
 
         return new Response('Le master Discogs n\'est pas dans votre collection.');
     }
+
+    #[Route("/favorites", name: "favorites_index")]
+    public function index(DiscogsMasterRepository $repository, UserRepository $userRepository, Request $request): Response
+    {
+        $form = $this->createForm(DiscogsMasterFilterType::class);
+        $form->handleRequest($request);
+
+        $masters = [];
+
+        $masters = $userRepository->find($this->getUser()->getId())->getDiscogsMasters();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            switch ($data['filterType']) {
+                case 'fruit':
+                    $masters = $repository->findDiscogsMasterByFruit($data['filterValue']);
+                    break;
+                case 'year':
+                    $masters = $repository->findDiscogsMasterByYear($data['filterValue']);
+                    break;
+                case 'groupName':
+                    $masters = $repository->findDiscogsMasterByName($data['filterValue']);
+                    break;
+                case 'label':
+                    $masters = $repository->findDiscogsMasterByLabel($data['filterValue']);
+                    break;
+                case 'genre':
+                    $masters = $repository->findDiscogsMasterByGenre($data['filterValue']);
+                    break;
+                case 'format':
+                    $masters = $repository->findDiscogsMasterByFormat($data['filterValue']);
+                    break;
+            }
+
+            // Clean the masters who are not in the user's collection
+            // Should be done in the repository ???
+            $masters = array_filter($masters, fn(DiscogsMaster $master) => $this->getUser()->getDiscogsMasters()->exists(fn(int $key, DiscogsMaster $masterInCollection) => $masterInCollection->getId() === $master->getId()));
+
+        }
+
+        return $this->render('favorites/favorites.html.twig', [
+            'masters' => $masters,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/favorites/master/{id}', name: 'favorites_master_show')]
+    public function searchMaster(int $id, DiscogsMasterRepository $repository): Response
+    {
+        $master = $repository->find($id);
+        $isInFavorites = $this->getUser() ? $this->getUser()->getDiscogsMasters()->exists(fn(int $key, DiscogsMaster $master) => $master->getId() === $id) : false;
+
+        return $this->render('favorites/master.html.twig', [
+            'master' => $master,
+            'isInFavorites' => $isInFavorites,
+        ]);
+    }
 }
+
+/*
+_______    _   _   _   ______          _   _   _ 
+|__   __|  | | | | (_) |  ____|        | | | | (_)
+   | |_   _| |_| |_ _  | |__ _ __ _   _| |_| |_ _ 
+   | | | | | __| __| | |  __| '__| | | | __| __| |
+   | | |_| | |_| |_| | | |  | |  | |_| | |_| |_| |
+   |_|\__,_|\__|\__|_| |_|  |_|   \__,_|\__|\__|_|
+
+*/
