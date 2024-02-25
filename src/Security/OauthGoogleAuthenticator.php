@@ -38,11 +38,23 @@ class OauthGoogleAuthenticator extends OauthAuthenticator
         return 'landing' === $request->attributes->get('__route') && $request->get($this->oauthClient);
     }
 
+
+    public function getUserFromResourceOwner(ResourceOwnerInterface $resourceOwner, UserRepository $repository)
+    {
+        // logique pour verifier si l'utilisateur existe dans google
+        $google_id  = $resourceOwner->getId();
+        $google_email = $resourceOwner->toArray()["email_verified"];
+
+        if($google_id && $google_email){
+            return $repository->findByGoogleId($google_id);
+        }
+    }
+
     public function authenticate(Request $request): SelfValidatingPassport
     {
         $accessToken = $this->fetchAccessToken($this->getClient());
-        $ressourceOwner = $this->getRessourceOwnerFromCredentials($accessToken);
-        $user = $this->getUserFromRessoucesOwner($ressourceOwner,$this->repository);
+        $ressourceOwner = $this->getResourceOwnerFromCredentials($accessToken);
+        $user = $this->getUserFromResourceOwner($ressourceOwner,$this->repository);
         if($user === null) $this->repository->oauthPersist($user);
         return new SelfValidatingPassport(new UserBadge($user->getUserIdentifier(),fn()=>$user),
         badges:
@@ -54,7 +66,10 @@ class OauthGoogleAuthenticator extends OauthAuthenticator
     }
 
 
-    private function getRessourceOwnerFromCredentials(AccessToken $credentials): ResourceOwnerInterface {
+
+
+
+    private function getResourceOwnerFromCredentials(AccessToken $credentials): ResourceOwnerInterface {
         return $this->getClient()->fetchUserFromToken($credentials);
     }
 
@@ -92,14 +107,5 @@ class OauthGoogleAuthenticator extends OauthAuthenticator
     //    }
 
 
-    public function getUserFromResourceOwner(ResourceOwnerInterface $resourceOwner, UserRepository $repository)
-    {
-        // logique pour verifier si l'utilisateur existe dans google
-        $google_id  = $resourceOwner->getId();
-        $google_email = $resourceOwner->toArray()["email_verified"];
 
-        if($google_id && $google_email){
-            return $repository->findByGoogleId($google_id);
-        }
-    }
 }
