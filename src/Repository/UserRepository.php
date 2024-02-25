@@ -67,13 +67,27 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //        ;
 //    }
 
-     public function findByGoogleId($value): ?User
-        {
-            return $this->createQueryBuilder('u')
-                ->andWhere('u.google_id = :google_id')
-                ->setParameter('google_id', $value)
-                ->getQuery()
-                ->getOneOrNullResult()
-        ;
-        }
+
+
+
+    public function findByGoogleId($value): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.google_id = :google_id')
+            ->setParameter('google_id', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+
+    public function findBySpotifyId($value): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.spotifyId = :spotifyId')
+            ->setParameter('spotifyId', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 }

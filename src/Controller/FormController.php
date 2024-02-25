@@ -46,7 +46,7 @@ class FormController extends AbstractController
     #[Route(path: '/oauth/connect/{client}', name: 'connect', methods: ['GET'])]
     public function connect(string $client, ClientRegistry $registry): RedirectResponse
     {
-        if($client != "google"){ // verifie les client oauth supporté
+        if($client != "google" && $client != "spotify"){ // verifie les client oauth supporté
            throw $this->createNotFoundException();
         }
         return $registry->getClient($client)->redirect([]);

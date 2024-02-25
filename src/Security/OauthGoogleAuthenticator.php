@@ -22,24 +22,20 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class OauthGoogleAuthenticator extends OAuth2Authenticator
+class OauthGoogleAuthenticator extends OauthAuthenticator
 {
 
     use TargetPathTrait;
 
-    private string $oauthClient = "google";
-
-    public function __construct(private readonly ClientRegistry $clientRegistry, private readonly RouterInterface $router,private  readonly UserRepository $repository){
+    protected string $oauthClient = "google";
 
 
-    }
 
 
 
     public function supports(Request $request): ?bool
     {
-        dd($this);
-        return "landing" === $request->attributes->get('__route') && $request->get("service") === $this->oauthClient;
+        return 'landing' === $request->attributes->get('__route') && $request->get($this->oauthClient);
     }
 
     public function authenticate(Request $request): SelfValidatingPassport
@@ -57,16 +53,6 @@ class OauthGoogleAuthenticator extends OAuth2Authenticator
 
     }
 
-    public function getUserFromRessoucesOwner(ResourceOwnerInterface $resourceOwner, UserRepository $repository){
-        // logique pour verifier si l'utilisateur existe dans google
-         $google_id  = $resourceOwner->getId();
-         $google_email = $resourceOwner->toArray()["email_verified"];
-
-        if($google_id && $google_email){
-            return $repository->findByGoogleId($google_id);
-        }
-
-    }
 
     private function getRessourceOwnerFromCredentials(AccessToken $credentials): ResourceOwnerInterface {
         return $this->getClient()->fetchUserFromToken($credentials);
@@ -104,4 +90,16 @@ class OauthGoogleAuthenticator extends OAuth2Authenticator
     //         * For more details, see https://symfony.com/doc/current/security/experimental_authenticators.html#configuring-the-authentication-entry-point
     //         */
     //    }
+
+
+    public function getUserFromResourceOwner(ResourceOwnerInterface $resourceOwner, UserRepository $repository)
+    {
+        // logique pour verifier si l'utilisateur existe dans google
+        $google_id  = $resourceOwner->getId();
+        $google_email = $resourceOwner->toArray()["email_verified"];
+
+        if($google_id && $google_email){
+            return $repository->findByGoogleId($google_id);
+        }
+    }
 }
