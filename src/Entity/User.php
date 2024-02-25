@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -30,11 +32,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $google_id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $spotifyId = null;
+    #[ORM\ManyToMany(targetEntity: DiscogsMaster::class, inversedBy: "users", cascade: ["persist", "remove"])]
+    #[ORM\JoinTable(name: "user_discogs_master")]
+    private $discogsMasters;
+
+    public function __construct()
+    {
+        $this->discogsMasters = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -129,6 +141,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    /**
+     * @see UserInterface
+     */
 
+    /**
+     * @return Collection|DiscogsMaster[]
+     */
+    public function getDiscogsMasters(): Collection
+    {
+        return $this->discogsMasters;
+    }
 
+    /**
+     * @param DiscogsMaster $discogsMaster
+     */
+    public function addDiscogsMaster(DiscogsMaster $discogsMaster): void
+    {
+        if (!$this->discogsMasters->contains($discogsMaster)) {
+            $this->discogsMasters->add($discogsMaster);
+        }
+    }
+
+    /**
+     * @param DiscogsMaster $discogsMaster
+     */
+    public function removeDiscogsMaster(DiscogsMaster $discogsMaster): void
+    {
+        $this->discogsMasters->removeElement($discogsMaster);
+    }
 }

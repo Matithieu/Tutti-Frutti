@@ -46,11 +46,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
+
+    public function createUser(User $user): void
+    {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
 
 
+    public function updateUser(User $user): void
+    {
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
+    }
 
 //    /**
 //     * @return User[] Returns an array of User objects
@@ -66,10 +74,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getResult()
 //        ;
 //    }
-
-
-
-
     public function findByGoogleId($value): ?User
     {
         return $this->createQueryBuilder('u')
