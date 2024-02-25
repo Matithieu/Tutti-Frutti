@@ -1,10 +1,18 @@
-{{ form_start(form) }}
-<div class="flex items-center">
-	<div class="">
-		{{ form_row(form.query) }}
+<div aria-label="Search" class="search-bar">
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger text-white" role="alert">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	{{ form_start(form) }}
+	<div class="flex items-center">
+		<div class="">
+			{{ form_row(form.query) }}
+		</div>
+		<div class="btn btn-primary btn-block text-white border">
+			{{ form_row(form.search) }}
+		</div>
 	</div>
-	<div class="btn btn-primary btn-block text-white border">
-		{{ form_row(form.search) }}
-	</div>
+	{{ form_end(form) }}
 </div>
-{{ form_end(form) }}

@@ -5,12 +5,11 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class LandingController extends AbstractController
 {
     //#[IsGranted('ROLE_USER', message: 'You are not allowed to access this page.')]
-    #[Route('/landing', name: "landing")]
+    #[Route('/', name: "landing")]
     public function number(): Response
     {
        // $this->denyAccessUnlessGranted('ROLE_USER');

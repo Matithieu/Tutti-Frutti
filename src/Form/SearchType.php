@@ -18,7 +18,8 @@ class SearchType extends AbstractType
                 'search',
                 SubmitType::class,
                 [
-                    'label' => 'Search',                ]
+                    'label' => 'Search',
+                ]
             );
     }
 

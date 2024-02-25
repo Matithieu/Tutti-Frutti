@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
-    #[Route(name: "search")]
+    #[Route('/search-bar', name: 'search')]
     public function search(Request $request): Response
     {
         $form = $this->createForm(SearchType::class, null, [
@@ -21,6 +21,15 @@ class SearchController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $searchData = $form->getData();
             $query = $searchData['query'];
+
+            $fruits = ['apple', 'banana', 'orange', 'grape'];
+
+            if (!in_array(strtolower($query), $fruits)) {
+                $this->addFlash('error', 'Please enter a valid fruit.');
+
+                // Redirect to the route where the user is coming from
+                return $this->redirect($request->headers->get('referer'));
+            }
 
             // Render the search result template and pass the ID
             return $this->redirectToRoute('search_result', ['query' => $query]);
