@@ -36,50 +36,47 @@ class DiscogsMasterRepository extends ServiceEntityRepository
         - Genre
         - Format
      */
-    public function findDiscogsMasterByFruit(string $fruit): array
+    public function findDiscogsMasterByFruit(?string $fruit): array
     {
         return $this->createQueryBuilder('d')
-            ->andWhere('d.fruit = :fruit')
-            ->setParameter('fruit', $fruit)
+            ->andWhere('LOWER(d.title) LIKE :title')
+            ->setParameter('title', '%' . strtolower($fruit) . '%')
             ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
-    }
+            ->getResult();
+    }    
 
-    public function findDiscogsMasterByYear(int $year): array
+    public function findDiscogsMasterByYear(?int $year): array
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.year = :year')
             ->setParameter('year', $year)
             ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
+            //->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
 
-    public function findDiscogsMasterByName(string $name): array
+    public function findDiscogsMasterByName(?string $name): array
     {
         return $this->createQueryBuilder('d')
             ->join('d.artists', 'a')
-            ->andWhere('a.name = :name')
+            ->andWhere('a.name = :name OR a.name IS NULL') // Check for NULL as well
             ->setParameter('name', $name)
             ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
+            //->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
-    public function findDiscogsMasterByLabel(string $label): array
+    public function findDiscogsMasterByLabel(?string $label): array
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.label = :label')
             ->setParameter('label', $label)
             ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
+            //->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
@@ -91,19 +88,19 @@ class DiscogsMasterRepository extends ServiceEntityRepository
             ->andWhere('d.genres = :genres')
             ->setParameter('genres', $genres)
             ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
+            //->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
 
-    public function findDiscogsMasterByFormat(string $format): array
+    public function findDiscogsMasterByFormat(?string $format): array
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.format = :format')
             ->setParameter('format', $format)
             ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
+            //->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
