@@ -37,7 +37,14 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/login, roles: }
-        - { path: ^/register, roles: }
+        - { path: ^/register, roles:}
+        - { path: ^/landing, roles: }
+        - { path: /oauth/ , roles: }
+        - { path: /oauth/connect/ , roles: }
+        - { path: /oauth/check/ , roles: }
+        - { path: ^/oauth/connect/$, roles: }
+        - { path: ^/oauth/check/$, roles: }
+        - { path: ^/oauth/login}
         - { path: ^/$, roles: }
         - { path: ^/, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }

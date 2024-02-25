@@ -14,17 +14,14 @@ class DiscogsAPIController extends AbstractController
     #[Route(path: '/{type}?{id}', name: 'type_of_media', requirements: ['type' => 'master|artist|release|label'])]
     public function typeOfMedia(string $type, $id): Response
     {
-        switch ($type) {
-            case 'release':
-                return $this->redirectToRoute('release_show', ['id' => $id]);
-            case 'master':
-                return $this->redirectToRoute('master_show', ['id' => $id]);
-            case 'artist':
-                return $this->redirectToRoute('artist_show', ['id' => $id]);
-            case 'label':
-                return $this->redirectToRoute('label_show', ['id' => $id]);
-        }
-        return $this->redirectToRoute('landing'); // This should never happen, put a 404 page here
+        return match ($type) {
+            'release' => $this->redirectToRoute('release_show', ['id' => $id]),
+            'master' => $this->redirectToRoute('master_show', ['id' => $id]),
+            'artist' => $this->redirectToRoute('artist_show', ['id' => $id]),
+            'label' => $this->redirectToRoute('label_show', ['id' => $id]),
+            default => $this->redirectToRoute('landing'),
+        };
+        // This should never happen, put a 404 page here
     }
 
     #[Route('/release/{id}', name: 'release_show')]

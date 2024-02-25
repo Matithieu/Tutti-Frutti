@@ -41,8 +41,8 @@ class OauthSpotifyAuthenticator extends OauthAuthenticator
     public function authenticate(Request $request): SelfValidatingPassport
     {
         $accessToken = $this->fetchAccessToken($this->getClient());
-        $ressourceOwner = $this->getRessourceOwnerFromCredentials($accessToken);
-        $user = $this->getUserFromRessoucesOwner($ressourceOwner,$this->repository);
+        $resourceOwner = $this->getResourceOwnerFromCredentials($accessToken);
+        $user = $this->getUserFromResourceOwner($resourceOwner,$this->repository);
         if($user === null) $this->repository->oauthPersist($user);
         return new SelfValidatingPassport(new UserBadge($user->getUserIdentifier(),fn()=>$user),
             badges:
@@ -55,7 +55,7 @@ class OauthSpotifyAuthenticator extends OauthAuthenticator
 
 
 
-    private function getRessourceOwnerFromCredentials(AccessToken $credentials): ResourceOwnerInterface {
+    private function getResourceOwnerFromCredentials(AccessToken $credentials): ResourceOwnerInterface {
         return $this->getClient()->fetchUserFromToken($credentials);
     }
 
