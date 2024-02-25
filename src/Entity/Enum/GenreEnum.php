@@ -6,24 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 class GenreEnum
 {
     // https://support.discogs.com/hc/fr/articles/360005055213-Guide-d-Utilisation-de-la-Base-de-Donn%C3%A9es-9-Genres-Styles
-    /**
-     * Blues
-Brass & Military(Fanfares & Militaires)
-Pour Enfant
-Classique
-Électronique
-Folk, World, & Country(Folk, Musique du Monde, & Country)
-Funk / Soul
-Funk / Soul
-Hip-Hop
-Jazz
-Latin
-Pas de music
-Pop
-Reggae
-Rock 
-Stage & Screen 
-     */
+    
     public const BLUES = 'Blues';
     public const BRASS_AND_MILITARY = 'Brass_and_military';
     public const CHILDREN = 'Children';
@@ -55,7 +38,27 @@ Stage & Screen
 
     public static function getValidValues(): array
     {
-        return [self::ROCK, self::POP];
-        // Add more genres as needed
+        return [
+            self::BLUES,
+            self::BRASS_AND_MILITARY,
+            self::CHILDREN,
+            self::CLASSICAL,
+            self::ELECTRONIC,
+            self::FOLK_WORLD_COUNTRY,
+            self::FUNK_SOUL,
+            self::HIP_HOP,
+            self::JAZZ,
+            self::LATIN,
+            self::NO_MUSIC,
+            self::POP,
+            self::REGGAE,
+            self::ROCK,
+            self::STAGE_AND_SCREEN,
+            self::NO_MUSIC,
+            self::POP,
+            self::REGGAE,
+            self::ROCK,
+            self::STAGE_AND_SCREEN,
+        ];
     }
 }
