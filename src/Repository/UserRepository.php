@@ -40,11 +40,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function oauthPersist(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
+        }
+
+
     public function createUser(User $user): void
     {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
 
     public function updateUser(User $user): void
     {
@@ -66,14 +74,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getResult()
 //        ;
 //    }
+    public function findByGoogleId($value): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.google_id = :google_id')
+            ->setParameter('google_id', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+
+    public function findBySpotifyId($value): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.spotifyId = :spotifyId')
+            ->setParameter('spotifyId', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 }

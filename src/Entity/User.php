@@ -32,6 +32,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $google_id = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $spotifyId = null;
     #[ORM\ManyToMany(targetEntity: DiscogsMaster::class, inversedBy: "users", cascade: ["persist", "remove"])]
     #[ORM\JoinTable(name: "user_discogs_master")]
     private $discogsMasters;
@@ -40,6 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->discogsMasters = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -109,6 +116,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getGoogleId(): ?string
+    {
+        return $this->google_id;
+    }
+
+    public function setGoogleId(?string $google_id): static
+    {
+        $this->google_id = $google_id;
+
+        return $this;
+    }
+
+    public function getSpotifyId(): ?string
+    {
+        return $this->spotifyId;
+    }
+
+    public function setSpotifyId(string $spotifyId): static
+    {
+        $this->spotifyId = $spotifyId;
+
+        return $this;
     }
     /**
      * @see UserInterface
